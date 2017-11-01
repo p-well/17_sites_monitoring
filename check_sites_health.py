@@ -1,6 +1,6 @@
 import argparse
 #import requests
-#import chardet
+import chardet
 import os
 
 def return_arg():
@@ -13,39 +13,48 @@ def return_arg():
 def define_charset(filepath):
     if not os.path.isfile(filepath):
         return None
-    with open(filepath,'rb') as file_with_unknown_charset:
-        file_charset = chardet.detect(file_with_unkwown_charset.read()).get('encoding')
+    with open(filepath,'rb') as ulrs_list_file:
+        file_charset = chardet.detect(ulrs_list_file.read()).get('encoding')
     return file_charset
 
-def load_urls4check(filepath):
+def load_urls4check(filepath, charset):
     all_urls_data = []
     if not os.path.isfile(filepath):
         return None
-    with open(filepath, 'r', encoding = 'utf-8') as file_content:
-        for line in file_content:
-            url = line.replace('\n','')
-            url_info = {}
-            url_info['url'] = url
-            url_info['status_code'] = None
-            url_info['reason_phrase'] = None
-            url_info['payment'] = None
-            all_urls_data.append(url_info)
-        print(all_urls_data) 
-    #return opened_urls_list
+    with open(filepath, 'r', encoding = charset) as file_content:
+        #return file_content.read().splitlines()
+        print(file_content.read().splitlines())
     
-def is_server_respond_with_200(url):
-    for url_info in load_urls4check(filepath):
-        
-    
-    pass 
-    
+def get_server_response(url):
+    try:
+        response_code = requests.get(url).status_code
+        return response_code
+    except requests.exceptions.RequestException:
+        return None
 
-def get_domain_expiration_date(domain_name):
-    pass
+def check_domain_expiration_date(domain_name):
+    domain_expiration_dt = whois.whois(url).expiration_date
+    if type(domain_expiration_dt) == datetime:
+        return domain_expiration_dt.date() 
+    elif type(domain_expiration_dt) == list:
+        return domain_expiration_dt[0].date()
+    else:
+        return None
+
+
 
 if __name__ == '__main__':
     #path = return_arg().filepath
-    load_urls4check(return_arg().filepath)
-    
-    #[{'url':'devman.org','code_200':'type_boolean_here', 'domain_payment > 1 month': 'type_boolean_here'}, {}, {}]
-    
+
+    load_urls4check(return_arg().filepath, define_charset(return_arg().filepath))
+
+
+        #     url = line.replace('\n','')
+        #     url_info = {}
+        #     url_info['url'] = url
+        #     url_info['status_code'] = None
+        #     url_info['reason_phrase'] = None
+        #     url_info['payment'] = None
+        #     all_urls_data.append(url_info)
+        # print(all_urls_data) 
+    #return opened_urls_list
