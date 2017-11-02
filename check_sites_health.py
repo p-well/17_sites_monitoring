@@ -1,8 +1,8 @@
-from datetime import datetime
+from datetime import date, datetime 
 import argparse
-#import requests
-#import chardet
-#import whois
+import requests
+import chardet
+import whois
 import os
 import re
 
@@ -33,12 +33,9 @@ def load_urls4check(filepath, charset = 'utf-8'):
             else:
                 invalid_urls.append(url)
                 urls['invalid'] = invalid_urls
-        #return urls
-        print(urls)
-        if urls is True:
-            print('Yes')
-        else:
-            print('False')
+        return urls
+        #print(urls)
+
 def get_server_response_code(url):
     try:
         response_code = requests.get(url).status_code
@@ -49,25 +46,27 @@ def get_server_response_code(url):
 def check_domain_expiration_date(domain_name):
     domain_expiration_dt = whois.whois(url).expiration_date
     if type(domain_expiration_dt) == datetime:
-        return domain_expiration_dt.date() 
+        return domain_expiration_dt
     elif type(domain_expiration_dt) == list:
-        return domain_expiration_dt[0].date()
+        return domain_expiration_dt[0]
     else:
         return None
-        
-#remainig_subscription_days = (domain_expiration_dt[0] - datetime.now()).date()
-
-if __name__ == '__main__':
-    load_urls4check(return_args().filepath)
     
-#if __name__ == '__main__':
-#    urls_loaded_from_file = load_urls4check(return_args().filepath,
-#                                            define_charset(return_args().filepath))
-#    if urls_loaded_from_file: 
-#       for url in urls_loaded_from_file['valid']:
-#           responce_code = get_server_response_code(url)
-#           expiration_date = check_domain_expiration_date(url)
-#           days_till_expiration = expiration_date - datetime.now()).date() 
-#               
-#    else:
-#       print('No valid URLs or empty file')    
+if __name__ == '__main__':
+    urls_loaded_from_file = load_urls4check(return_args().filepath,
+                                           define_charset(return_args().filepath))
+    if urls_loaded_from_file: 
+        for count, url in enumerate(urls_loaded_from_file['valid'], start = 1):
+            responce_code = get_server_response_code(url)
+            expiration_date_raw = check_domain_expiration_date(url)
+            #print(expiration_date_raw)
+            expiration_date = datetime.strftime(expiration_date_raw, '%d-%m-%Y') 
+            #print(expiration_date)
+            days_till_expiration = (expiration_date_raw.date() - date.today())
+            #print(days_till_expiration.days)
+            print('{}. Resource: {} \n   Status code: {} \n   Expiration date: {} \n   Remaing time: {} days \n'
+                 .format(count, url, responce_code, expiration_date, days_till_expiration.days))
+            if (days_till_expiration) < 30:
+                print('Warning! Domain expiration date is coming soon.') 
+    else:
+        print('\nNo valid URLs or empty file')    
