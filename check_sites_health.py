@@ -27,7 +27,7 @@ def load_urls4check(filepath, charset = 'utf-8'):
         return None
     with open(filepath, 'r', encoding = charset) as file_content:
         for url in file_content.read().splitlines():
-            if re.compile('http').match(url) is not None:
+            if match(r'http',url) is not None:
                 valid_urls.append(url)
                 urls['valid'] = valid_urls 
             else:
@@ -66,7 +66,7 @@ if __name__ == '__main__':
             #print(days_till_expiration.days)
             print('{}. Resource: {} \n   Status code: {} \n   Expiration date: {} \n   Remaing time: {} days \n'
                  .format(count, url, responce_code, expiration_date, days_till_expiration.days))
-            if (days_till_expiration) < 30:
+            if days_till_expiration.days < 30:
                 print('Warning! Domain expiration date is coming soon.') 
     else:
-        print('\nNo valid URLs or empty file')    
+print('\nNo valid URLs or empty file')
