@@ -69,4 +69,4 @@ if __name__ == '__main__':
             for count, url in enumerate(urls_loaded_from_file['invalid'], start = 1):
                 print({}. {}).format(count, url)
     else:
-print('\nNo valid URLs or empty file')
+        print('\nNo valid URLs or empty file')
