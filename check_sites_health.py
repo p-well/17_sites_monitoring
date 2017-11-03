@@ -34,8 +34,7 @@ def load_urls4check(filepath, charset = 'utf-8'):
                 invalid_urls.append(url)
                 urls['invalid'] = invalid_urls
         return urls
-        #print(urls)
-
+        
 def get_server_response_code(url):
     try:
         response_code = requests.get(url).status_code
@@ -59,14 +58,15 @@ if __name__ == '__main__':
         for count, url in enumerate(urls_loaded_from_file['valid'], start = 1):
             responce_code = get_server_response_code(url)
             expiration_date_raw = check_domain_expiration_date(url)
-            #print(expiration_date_raw)
             expiration_date = datetime.strftime(expiration_date_raw, '%d-%m-%Y') 
-            #print(expiration_date)
             days_till_expiration = (expiration_date_raw.date() - date.today())
-            #print(days_till_expiration.days)
             print('{}. Resource: {} \n   Status code: {} \n   Expiration date: {} \n   Remaing time: {} days \n'
                  .format(count, url, responce_code, expiration_date, days_till_expiration.days))
             if days_till_expiration.days < 30:
-                print('Warning! Domain expiration date is coming soon.') 
+                print('Warning! Domain expiration date is coming soon.')
+        if urls_loaded_from_file['invalid']:
+            print('The follwing items have not been checked. Specify protocop in URL and try again.')
+            for count, url in enumerate(urls_loaded_from_file['invalid'], start = 1):
+                print({}. {}).format(count, url)
     else:
 print('\nNo valid URLs or empty file')
