@@ -52,13 +52,16 @@ def print_resource_health_data(url, status_code=None,
                                remaining_days=None,
                                valid_urls=None,
                                invalid_urls=None):
-    if status_code == 200:
-        print("\nResource: {} | Status Code: {} | Available until: {}"
+    if status_code == 200 and expiration_date is not None:
+        print('\nResource: {} | Status Code: {} | Available until: {}'
               .format(url, status_code, expiration_date))
-    else:
-        print('\nResource %s FAILED with status code %s' % (url, status_code))
-    if remaining_days < 30:
+    if remaining_days is not None and remaining_days < 30:
         print('Warning! Domain name will expire in %s days' % remaining_days)
+    if status_code != 200:
+        print('\nResource %s FAILED with status code %s' % (url, status_code))
+    elif status_code == 200 and expiration_date is None:
+        print('\nResource {} is OK but expiration date in not available!'.
+              format(url))
 
 
 if __name__ == '__main__':
@@ -67,13 +70,18 @@ if __name__ == '__main__':
         for url in urls_for_check['valid']:
             response_code = get_server_response_code(url)
             exp_date_raw = get_domain_expiration_date(url)
-            remaining_days = (exp_date_raw.date() - date.today()).days
-            exp_date_formatted = datetime.strftime(exp_date_raw, '%d-%m-%Y')
+            if exp_date_raw is not None:
+                remaining_days = (exp_date_raw.date() - date.today()).days
+                exp_date_formatted = datetime.strftime(exp_date_raw,
+                                                       '%d-%m-%Y')
+            else:
+                remaining_days = None
+                exp_date_formatted = None
             print_resource_health_data(url, response_code,
                                        exp_date_formatted,
                                        remaining_days)
     if urls_for_check.get('invalid'):
-        print('\n\nThe following items are not checked. Specify protocop \
+        print('\n\nItems below are not checked. Specify protocop \
 and try again.\n')
         for url in urls_for_check['invalid']:
             print(url)
