@@ -21,7 +21,7 @@ It is recommended to use virtual environment.
 
 To execute the script run the command ```python check_sites_health.py <filepath>``` in your OS console/terminal.
 
-The only argument you need to specify is the path to ```.txt``` file with list of websites you want to check. <br /n>
+The only argument you need to specify is the path to ```.txt``` file with list of websites you want to check. <br />
 Place each URL in your list on a new string.
 
 Script will reject URLs without specified protocol - see example below.
