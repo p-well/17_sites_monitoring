@@ -63,8 +63,7 @@ def print_resource_health_data(url, status_code=None,
         print('\nResource {} is OK but expiration date in not available!'.
               format(url))
 
-
-if __name__ == '__main__':
+def main():
     urls_for_check = load_urls4check(return_args().filepath)
     if urls_for_check.get('valid'):
         for url in urls_for_check['valid']:
@@ -85,3 +84,6 @@ if __name__ == '__main__':
 and try again.\n')
         for url in urls_for_check['invalid']:
             print(url)
+
+if __name__ == '__main__':
+    main()
