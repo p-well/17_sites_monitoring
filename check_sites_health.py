@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from collections import namedtuple
 import os
 import argparse
 import requests
@@ -38,52 +39,50 @@ def get_server_response_code(url):
 
 
 def get_domain_expiration_date(domain_name):
-    domain_expiration_dt = whois.whois(url).expiration_date
-    if isinstance(domain_expiration_dt, datetime):
-        return domain_expiration_dt
-    elif isinstance(domain_expiration_dt, list):
-        return domain_expiration_dt[0]
+    exp_date = whois.whois(url).expiration_date
+    if exp_date is not None and isinstance(exp_date, datetime):
+        raw_exp_date = exp_date
+    elif exp_date is not None and isinstance(exp_date, list):
+        raw_exp_date = exp_date[0]
     else:
-        return None
+        raw_exp_date = None
+    if raw_exp_date is not None:
+        formatted_exp_date = datetime.strftime(raw_exp_date, '%d-%m-%Y')
+        remaining_days = (raw_exp_date.date() - date.today()).days
+        dates_template = namedtuple('domain_dates',
+                                    'expiration_date remaining_days')
+        domain_dates_info = dates_template(formatted_exp_date, remaining_days)
+        return domain_dates_info
 
 
-def print_resource_health_data(url, status_code=None,
-                               expiration_date=None,
-                               remaining_days=None,
-                               valid_urls=None,
-                               invalid_urls=None):
-    if status_code == 200 and expiration_date is not None:
-        print('\nResource: {} | Status Code: {} | Available until: {}'
-              .format(url, status_code, expiration_date))
-    if remaining_days is not None and remaining_days < 30:
-        print('Warning! Domain name will expire in %s days' % remaining_days)
+def print_resource_health_data(
+                               url,
+                               status_code=None,
+                               domain_info=None,
+                               ):
     if status_code != 200:
         print('\nResource %s FAILED with status code %s' % (url, status_code))
-    elif status_code == 200 and expiration_date is None:
-        print('\nResource {} is OK but expiration date in not available!'.
-              format(url))
+    if domain_info is not None:
+        if status_code == 200:
+            print('\nResource: {} | Status Code: {} | Available until: {}'
+                  .format(url, status_code, domain_info.expiration_date))
+        elif domain_info.remaining_days < 30:
+            print('Domain name will expire in %s days' % remaining_days)
+    elif domain_info is None and status_code == 200:
+        print('\nResource %s: OK but expiration date in not available!' % url)
 
-def main():
+
+if __name__ == '__main__':
     urls_for_check = load_urls4check(return_args().filepath)
     if urls_for_check.get('valid'):
-        for url in urls_for_check['valid']:
+        for url in urls_for_check.get('valid'):
             response_code = get_server_response_code(url)
-            exp_date_raw = get_domain_expiration_date(url)
-            if exp_date_raw is not None:
-                remaining_days = (exp_date_raw.date() - date.today()).days
-                exp_date_formatted = datetime.strftime(exp_date_raw,
-                                                       '%d-%m-%Y')
-            else:
-                remaining_days = None
-                exp_date_formatted = None
-            print_resource_health_data(url, response_code,
-                                       exp_date_formatted,
-                                       remaining_days)
+            domain_info = get_domain_expiration_date(url)
+            print_resource_health_data(url,
+                                       response_code,
+                                       domain_info)
     if urls_for_check.get('invalid'):
-        print('\n\nItems below are not checked. Specify protocop \
+        print('\n\nItems below are not checked. Specify protocol \
 and try again.\n')
         for url in urls_for_check['invalid']:
             print(url)
-
-if __name__ == '__main__':
-    main()

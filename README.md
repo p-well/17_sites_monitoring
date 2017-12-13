@@ -33,7 +33,7 @@ Script will reject URLs without specified protocol - see example below.
 
 Resource: https://stackoverflow.com/ | Status Code: 200 | Available until: 02-02-2018
 
-Resource http://imwerden.de/cat/modules.php is OK but expiration date in not available!
+Resource http://imwerden.de/cat/modules.php: OK but expiration date in not available!
 
 Resource: https://tesla.com | Status Code: 200 | Available until: 03-11-2018
 
@@ -52,7 +52,7 @@ Resource: http://www.boeing.com/ | Status Code: 200 | Available until: 01-09-202
 Resource: http://www.moscowpython.ru/ | Status Code: 200 | Available until: 20-04-2018
 
 
-The following items are not checked. Specify protocop and try again.
+Items below are not checked. Specify protocol and try again.
 
 drive2.ru
 pythonworld.ru
