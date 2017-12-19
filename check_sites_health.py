@@ -39,20 +39,24 @@ def get_server_response_code(url):
 
 
 def get_domain_expiration_date(domain_name):
-    exp_date = whois.whois(url).expiration_date
-    if exp_date is not None and isinstance(exp_date, datetime):
-        raw_exp_date = exp_date
-    elif exp_date is not None and isinstance(exp_date, list):
-        raw_exp_date = exp_date[0]
-    else:
-        raw_exp_date = None
-    if raw_exp_date is not None:
-        formatted_exp_date = datetime.strftime(raw_exp_date, '%d-%m-%Y')
-        remaining_days = (raw_exp_date.date() - date.today()).days
-        dates_template = namedtuple('domain_dates',
-                                    'expiration_date remaining_days')
-        domain_dates_info = dates_template(formatted_exp_date, remaining_days)
-        return domain_dates_info
+    try:
+        exp_date = whois.whois(url).expiration_date
+        if exp_date is not None and isinstance(exp_date, datetime):
+            raw_exp_date = exp_date
+        elif exp_date is not None and isinstance(exp_date, list):
+            raw_exp_date = exp_date[0]
+        else:
+            raw_exp_date = None
+        if raw_exp_date is not None:
+            formatted_exp_date = datetime.strftime(raw_exp_date, '%d-%m-%Y')
+            remaining_days = (raw_exp_date.date() - date.today()).days
+            dates_template = namedtuple('domain_dates',
+                                        'expiration_date remaining_days')
+            domain_dates_info = dates_template(formatted_exp_date,
+                                               remaining_days)
+            return domain_dates_info
+    except whois.parser.PywhoisError:
+        return None
 
 
 def print_resource_health_data(
@@ -60,7 +64,9 @@ def print_resource_health_data(
                                status_code=None,
                                domain_info=None,
                                ):
-    if status_code != 200:
+    if status_code is None:
+        print('\nResource %s FAILED. Unavailable or wrong URL' % url)
+    elif status_code is not None and status_code != 200:
         print('\nResource %s FAILED with status code %s' % (url, status_code))
     if domain_info is not None:
         if status_code == 200:

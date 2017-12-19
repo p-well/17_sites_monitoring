@@ -37,6 +37,8 @@ Resource http://imwerden.de/cat/modules.php: OK but expiration date in not avail
 
 Resource: https://tesla.com | Status Code: 200 | Available until: 03-11-2018
 
+Resource https://some-strange-url.com FAILED. Unavailable or wrong URL
+
 Resource: https://python.org | Status Code: 200 | Available until: 28-03-2018
 
 Resource: https://devman.org | Status Code: 200 | Available until: 28-08-2018
