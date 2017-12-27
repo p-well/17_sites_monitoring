@@ -6,12 +6,12 @@ import requests
 import whois
 
 
-def return_args():
+def get_filepath():
     parser = argparse.ArgumentParser(prog='Site Heath Check Program.')
     parser.add_argument('filepath',
                         help='Path to file with URLs list', type=str)
-    args = parser.parse_args()
-    return args
+    path = parser.parse_args()
+    return path
 
 
 def load_urls4check(filepath):
@@ -78,7 +78,7 @@ def print_resource_health_data(
 
 
 if __name__ == '__main__':
-    urls_for_check = load_urls4check(return_args().filepath)
+    urls_for_check = load_urls4check(get_filepath().filepath)
     if urls_for_check.get('valid'):
         for url in urls_for_check.get('valid'):
             print('---')
