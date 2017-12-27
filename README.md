@@ -28,8 +28,8 @@ Script will reject URLs without specified protocol - see example below.
 
 # Example of Scripts Launch
 
-```
-__>python check_sites_health.py .\urls.txt__
+<pre>
+<b>>python check_sites_health.py .\urls.txt</b>
 
 ---
 Resource https://stackoverflow.com/ is OK
@@ -70,7 +70,7 @@ Items below are not checked. Specify protocol and try again.
 
 drive2.ru
 pythonworld.ru
-```
+</pre>
 
 
 # Project Goals
