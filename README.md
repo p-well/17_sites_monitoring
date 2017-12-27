@@ -29,7 +29,7 @@ Script will reject URLs without specified protocol - see example below.
 # Example of Scripts Launch
 
 ```
-**>python check_sites_health.py .\urls.txt**
+__>python check_sites_health.py .\urls.txt__
 
 ---
 Resource https://stackoverflow.com/ is OK
