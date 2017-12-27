@@ -29,29 +29,41 @@ Script will reject URLs without specified protocol - see example below.
 # Example of Scripts Launch
 
 ```
->python check_sites_health.py .\urls.txt
+**>python check_sites_health.py .\urls.txt**
 
-Resource: https://stackoverflow.com/ | Status Code: 200 | Available until: 02-02-2018
-
-Resource http://imwerden.de/cat/modules.php: OK but expiration date in not available!
-
-Resource: https://tesla.com | Status Code: 200 | Available until: 03-11-2018
-
-Resource https://some-strange-url.com FAILED. Unavailable or wrong URL
-
-Resource: https://python.org | Status Code: 200 | Available until: 28-03-2018
-
-Resource: https://devman.org | Status Code: 200 | Available until: 28-08-2018
-
-Resource https://www.amazon.com FAILED with status code 503
-
-Resource: https://www.tinkoff.ru/ | Status Code: 200 | Available until: 31-08-2018
-
-Resource: http://keratin.su/ | Status Code: 200 | Available until: 23-04-2018
-
-Resource: http://www.boeing.com/ | Status Code: 200 | Available until: 01-09-2022
-
-Resource: http://www.moscowpython.ru/ | Status Code: 200 | Available until: 20-04-2018
+---
+Resource https://stackoverflow.com/ is OK
+Available until 02-02-2018
+---
+Resource http://imwerden.de/cat/modules.php is OK
+Cant get expiration date for current resource
+---
+Resource https://tesla.com is OK
+Available until 03-11-2018
+---
+Resource https://some-strange-url.com is down: not 200OK code or wrong URL
+Cant get expiration date for current resource
+---
+Resource https://python.org is OK
+Available until 28-03-2018
+---
+Resource https://devman.org is OK
+Available until 28-08-2018
+---
+Resource https://www.amazon.com is down: not 200OK code or wrong URL
+Available until 31-10-2022
+---
+Resource https://www.tinkoff.ru/ is OK
+Available until 31-08-2018
+---
+Resource http://keratin.su/ is OK
+Available until 23-04-2018
+---
+Resource http://www.boeing.com/ is OK
+Available until 01-09-2022
+---
+Resource http://www.moscowpython.ru/ is OK
+Available until 20-04-2018
 
 
 Items below are not checked. Specify protocol and try again.

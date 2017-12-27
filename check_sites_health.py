@@ -66,13 +66,13 @@ def print_resource_health_data(
                                ):
     if status_code == 200:
         print('Resource %s is OK' % url)
-    elif status_code != 200 and status_code is not None:
-        print('Resource %s is down or wrong URL(code &s)' % (url, status_code))
+    elif status_code != 200 or status_code is None:
+        print('Resource %s is down: not 200OK code or wrong URL ' % url)
     if domain_info:
         if domain_info.remaining_days > 30:
-            print(' Available until %s'. % domain_info.expiration_date)
+            print('Available until %s' % domain_info.expiration_date)
         else:
-            print('%s days left until expiration!' % domain_info.remaining_days')
+            print('%s days left until expiration!' % domain_info.remaining_days)
     else:
         print('Cant get expiration date for current resource')
 
@@ -81,12 +81,12 @@ if __name__ == '__main__':
     urls_for_check = load_urls4check(return_args().filepath)
     if urls_for_check.get('valid'):
         for url in urls_for_check.get('valid'):
+            print('---')
             status_code = get_server_response_code(url)
             domain_info = get_domain_expiration_date(url)
             print_resource_health_data(url,
                                        status_code,
                                        domain_info)
-            print('---')
     if urls_for_check.get('invalid'):
         print('\n\nItems below are not checked. Specify protocol and try again.\n')
         for url in urls_for_check['invalid']:
