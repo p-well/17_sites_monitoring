@@ -33,16 +33,16 @@ Script will reject URLs without specified protocol - see example below.
 
 ---
 Resource https://stackoverflow.com/ is OK
-Available until 02-02-2018
+23 days until expiration!
 ---
 Resource http://imwerden.de/cat/modules.php is OK
-Cant get expiration date for current resource
+Cant get expiration date for current resource.
 ---
 Resource https://tesla.com is OK
 Available until 03-11-2018
 ---
 Resource https://some-strange-url.com is down: not 200OK code or wrong URL
-Cant get expiration date for current resource
+Cant get expiration date for current resource.
 ---
 Resource https://python.org is OK
 Available until 28-03-2018
@@ -66,7 +66,7 @@ Resource http://www.moscowpython.ru/ is OK
 Available until 20-04-2018
 
 
-Items below are not checked. Specify protocol and try again.
+Items below are not checked. Specify protocol.
 
 drive2.ru
 pythonworld.ru
