@@ -58,10 +58,14 @@ def format_expiration_date(exp_date):
     if raw_exp_date is not None:
         formatted_exp_date = datetime.strftime(raw_exp_date, '%d-%m-%Y')
         remaining_days = (raw_exp_date.date() - date.today()).days
-        dates_template = namedtuple('domain_dates',
-                                    'expiration_date remaining_days')
-        domain_dates_info = dates_template(formatted_exp_date,
-                                           remaining_days)
+        dates_template = namedtuple(
+            'domain_dates',
+            'expiration_date remaining_days'
+        )
+        domain_dates_info = dates_template(
+            formatted_exp_date,
+            remaining_days
+        )
         return domain_dates_info
 
 
